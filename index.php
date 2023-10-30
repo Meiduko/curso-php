@@ -17,7 +17,7 @@
   integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" 
   crossorigin="anonymous"></script>
   <!-- Static Content -->
-  <link rel="stylesheet" href="./static/css/index.css"
+  <link rel="stylesheet" href="./static/css/index.css">
 
   <title>Contacts App</title>
 </head>
@@ -67,7 +67,7 @@
           <div class="card text-center">
             <div class="card-body">
               <h3 class="card-title text-capitalize"><?= $contact["name"]?></h3>
-              <p class="m-2">987654321</p>
+              <p class="m-2"><?= $contact["phone_number"]?></p>
               <a href="#" class="btn btn-secondary mb-2">Edit Contact</a>
               <a href="#" class="btn btn-danger mb-2">Delete Contact</a>
             </div>

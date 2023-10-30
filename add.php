@@ -2,14 +2,24 @@
   
   require "database.php";
   
+  $error = null;
+
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["name"]) || empty($_POST["phone_number"])){
+      $error = "Please fill all the fields.";
+    }else if (strlen($_POST["phone_number"])< 9){
+      $error = "Phone number must be at least 9 characters.";
+    }else{
       $name = $_POST["name"];
       $phoneNumber = $_POST["phone_number"];
 
-      $statement = $conn->prepare("INSERT INTO contacts (name, phone_number) VALUES ('$name', '$phoneNumber')");
+      $statement = $conn->prepare("INSERT INTO contacts (name, phone_number) VALUES (:name, :phoneNumber)");
+      $statement->bindParam(":name", $_POST["name"]);
+      $statement->bindParam(":phone_number", $_POST["phone_number"]);
       $statement->execute();
 
-    header("Location: index.php");
+      header("Location: index.php");
+    }
   }
 ?>
 <!DOCTYPE html>
@@ -25,7 +35,7 @@
   integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" 
   crossorigin="anonymous"></script>
   <!-- Static Content -->
-  <link rel="stylesheet" href="./static/css/index.css"
+  <link rel="stylesheet" href="./static/css/index.css">
 
   <title>Contacts App</title>
 </head>
@@ -66,12 +76,17 @@
           <div class="card">
             <div class="card-header">Add New Contact</div>
             <div class="card-body">
-              <form method="POST" action="add.php">
+            <?php if ($error): ?>
+              <p class="text-danger">
+                <?= $error?>
+              </p>
+              <?php endif ?>
+            <form method="POST" action="add.php">
                 <div class="mb-3 row">
                   <label for="name" class="col-md-4 col-form-label text-md-end">Name</label>
     
                   <div class="col-md-6">
-                    <input id="name" type="text" class="form-control" name="name" required autocomplete="name" autofocus>
+                    <input id="name" type="text" class="form-control" name="name"  autocomplete="name" autofocus>
                   </div>
                 </div>
     
@@ -79,7 +94,7 @@
                   <label for="phone_number" class="col-md-4 col-form-label text-md-end">Phone Number</label>
     
                   <div class="col-md-6">
-                    <input id="phone_number" type="tel" class="form-control" name="phone_number" required autocomplete="phone_number" autofocus>
+                    <input id="phone_number" type="tel" class="form-control" name="phone_number"  autocomplete="phone_number" autofocus>
                   </div>
                 </div>
     
