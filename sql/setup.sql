@@ -10,13 +10,11 @@ CREATE TABLE users(
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255)
 );
-
-insert into users (name,email,password) values ("test", "test@test.com", "123");
-
 CREATE TABLE contacts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255)
-    phone_number VARCHAR(255)
-);
+    name VARCHAR(255),
+    user_id INT NOT NULL,
+    phone_number VARCHAR(255),
 
-INSERT INTO contacts (name, phone_number) VALUE ("Pepe", "123456789");
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
